@@ -37,7 +37,7 @@ onBeforeMount(() => {
 			name: "John Doe",
 			image: "https://placehold.co/100",
 			content: "Lorem ipsum 200",
-			picture: "https://placehold.co/100",
+			picture: "https://placehold.co/500",
 		},
 	];
 });
