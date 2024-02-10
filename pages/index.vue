@@ -15,6 +15,11 @@
 							:post="post"
 							@isDeleted="posts = []" />
 					</div>
+					<div
+						v-else
+						class="flex items-center justify-center h-[50vh]">
+						<p>No posts</p>
+					</div>
 				</div>
 			</div>
 		</div>
