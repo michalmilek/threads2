@@ -1,75 +1,42 @@
-# Nuxt 3 Minimal Starter
+# Clone Threads
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Clone Threads is an application for sharing posts, communicating with other users through comments, and giving likes to other posts. This project is built with Nuxt 3, Supabase, and Tailwind CSS.
 
-## Setup
+## What I've Done
 
-Make sure to install the dependencies:
+1. **Authentication:**
+   - Implemented user registration and login mechanism using Supabase services.
+   - Created registration and login forms and performed validation on user input.
 
-```bash
-# npm
-npm install
+2. **Adding Posts:**
+   - Enabled users to add new posts to the service.
+   - Created a form for adding posts and handled sending data to the Supabase database.
 
-# pnpm
-pnpm install
+## Planned Functionalities
 
-# yarn
-yarn install
+1. **Likes:**
+   - I will design a feature for liking posts, allowing users to express their interest in specific posts.
+   - Additionally, I will implement a likes counter that updates when a new like is added.
 
-# bun
-bun install
-```
+2. **Comments:**
+   - I will enable users to add comments to existing posts.
+   - I will create a comment form and display a list of comments for each post.
 
-## Development Server
+3. **Deleting Records:**
+   - I plan to implement functionalities for deleting posts and comments.
+   - I will add "Delete" buttons that appear next to each post or comment, allowing users to delete the corresponding record.
 
-Start the development server on `http://localhost:3000`:
+## Used Technologies
 
-```bash
-# npm
-npm run dev
+- **Nuxt 3:** A framework for building web applications based on Vue.js.
+- **Supabase:** A platform for building rapid prototypes for web applications with an embedded database.
+- **Tailwind CSS:** A CSS library that allows for rapid development of responsive and aesthetic user interfaces.
 
-# pnpm
-pnpm run dev
+## Running the Project
 
-# yarn
-yarn dev
+1. Install dependencies: `npm install`.
+2. Run the project: `npm run dev`.
 
-# bun
-bun run dev
-```
+## Author
 
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Project created by [Michał Miłek](https://github.com/michalmilek).
