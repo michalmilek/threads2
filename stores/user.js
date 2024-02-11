@@ -6,12 +6,17 @@ export const useUserStore = defineStore("user", {
 		isMenuOverlay: false,
 		isLogoutOverlay: false,
 	}),
-	actions: () => ({
+	actions: {
 		toggleMenuOverlay() {
 			this.isMenuOverlay = !this.isMenuOverlay;
 		},
 		toggleLogoutOverlay() {
 			this.isLogoutOverlay = !this.isLogoutOverlay;
 		},
-	}),
+		async getAllPosts() {
+			const res = await useFetch("/api/get-all-posts");
+			this.posts = res.data.value;
+			return res.data.value;
+		},
+	},
 });

@@ -11,6 +11,15 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			bucketUrl: process.env.BUCKET_URL,
+			supabase: {
+				url: process.env.SUPABASE_URL,
+				key: process.env.SUPABASE_KEY,
+				redirect: true,
+				redirectOptions: {
+					callback: "/",
+					login: "/auth",
+				},
+			},
 		},
 	},
 	devtools: { enabled: true },

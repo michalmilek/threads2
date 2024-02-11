@@ -11,14 +11,14 @@
 		</div>
 
 		<div class="flex w-full max-w-[500px] mx-auto h-screen">
-			<slot />
+			<slot name="signed-in" />
 		</div>
 
 		<div
 			id="bottomNav"
 			class="fixed z-50 bottom-0 flex w-full h-[70px] border-t border-t-gray-700 bg-black">
 			<div
-				class="flex w-full max-w-[500px] mx-auto flex items-center justify-around">
+				class="flex w-full max-w-[500px] mx-auto items-center justify-around">
 				<button @click="navigateTo('/')">
 					<Icon
 						name="material-symbols:home-outline"

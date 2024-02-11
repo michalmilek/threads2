@@ -12,10 +12,11 @@
 							{{ post.name }}
 						</h3>
 						<p class="text-sm">
-							{{ post.content }}
+							{{ post.text }}
 						</p>
 						<img
-							:src="post.picture"
+							v-if="post.picture"
+							:src="runtimeConfig.public.bucketUrl + post.picture"
 							:alt="post.picture + post.name" />
 
 						<div class="flex items-center gap-4">
@@ -83,12 +84,22 @@
 							v-if="isMenu"
 							class="absolute border border-gray-600 right-0 z-20 mt-1 rounded-lg">
 							<button
+								v-if="isMyPost"
 								class="flex items-center py-1 px-2 text-white bg-gray-800 hover:bg-gray-700">
 								<Icon
 									name="material-symbols-light:auto-delete"
 									color="#D43C1C"
 									size="18" />
 								<span class="ml-2">Delete</span>
+							</button>
+							<button
+								v-else
+								class="flex items-center py-1 px-2 text-white bg-gray-800 hover:bg-gray-700">
+								<Icon
+									name="material-symbols-light:report-outline-rounded"
+									color="#fff"
+									size="18" />
+								<span class="ml-2">Report</span>
 							</button>
 						</div>
 					</div>
@@ -98,19 +109,28 @@
 	</div>
 </template>
 <script setup>
-import { useUserStore } from "../stores/user";
-
 const userStore = useUserStore();
 const runtimeConfig = useRuntimeConfig();
 const isDeleting = ref(false);
 const isMenu = ref(false);
 const isLike = ref(false);
-
-const emit = defineEmits(["isDeleted"]);
+const user = useSupabaseUser();
+const { value: userValue } = user;
+const client = useSupabaseClient();
 const props = defineProps({
 	post: {
 		type: Object,
 		required: true,
 	},
 });
+const isMyPost = computed(
+	() =>
+		!!(
+			userValue &&
+			userValue.identities &&
+			userValue.identities[0].user_id === props.post.userId
+		)
+);
+
+const emit = defineEmits(["isDeleted"]);
 </script>

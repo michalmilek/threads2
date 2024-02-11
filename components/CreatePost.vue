@@ -22,11 +22,16 @@
 				class="z-40 bottom-0 max-h-[100vh-200px] w-full px-3 max-w-[500px] mx-auto">
 				<div class="py-2 w-full">
 					<div class="flex items-center">
-						<div class="flex items-center text-white gap-2">
+						<div
+							v-if="user"
+							class="flex items-center text-white gap-2">
 							<img
-								src="https://picsum.photos.id/223/50"
+								class="w-[40px] h-[40px] rounded-full"
+								:src="user.identities[0].identity_data.avatar_url"
 								alt="test" />
-							<span enter-class="font-semibold text-lg">Michał Miłek</span>
+							<span enter-class="font-semibold text-lg">{{
+								user.identities[0].identity_data.full_name
+							}}</span>
 						</div>
 					</div>
 
@@ -36,7 +41,7 @@
 								class="absolute ml-4 mt-1 top-0 w-[1px] bg-gray-700 h-full" />
 						</div>
 						<div
-							class="bg-black rounded-lg w-[calc(100%-50px)] text w-full font-light">
+							class="bg-black rounded-lg w-[calc(100%-50px)] text font-light">
 							<div class="pt-2 text-gray-300 bg-black w-full">
 								<textarea
 									id="createPostTextarea"
@@ -75,6 +80,7 @@
 				</div>
 			</div>
 			<button
+				@click="createPost"
 				v-if="text"
 				:disabled="isLoading"
 				class="fixed bottom-0 font-bold text-lg w-full p-2 text-white inline-block float-right transition-all duration-300 ease-in-out"
@@ -92,10 +98,12 @@
 	</div>
 </template>
 <script setup>
-import { useUserStore } from "../stores/user";
-// import { useSupabaseUser } from "../stores/user";
+import { v4 as uuidv4 } from "uuid";
+import { useUserStore } from "~/stores/user";
+
 const userStore = useUserStore();
-// const user = useSupabaseUser();
+const client = useSupabaseClient();
+const user = useSupabaseUser();
 
 const text = ref("");
 const isLoading = ref(false);
@@ -119,5 +127,54 @@ const clearData = () => {
 const onChange = () => {
 	fileDisplay.value = URL.createObjectURL(file.value.files[0]);
 	fileData.value = file.value.files[0];
+};
+
+const createPost = async () => {
+	let dataOut = null;
+	let errorOut = null;
+
+	isLoading.value = true;
+
+	if (fileData.value) {
+		const { data, error } = await client.storage
+			.from("threads-clone-files")
+			.upload(`public/${uuidv4()}`, fileData.value);
+
+		dataOut = data;
+		errorOut = error;
+	}
+
+	if (errorOut) {
+		console.error("Error uploading file:", errorOut);
+		isLoading.value = false;
+		return errorOut;
+	}
+
+	let pic = "";
+
+	if (dataOut) {
+		pic = dataOut.path ? dataOut.path : "";
+	}
+
+	try {
+		await useFetch(`/api/create-post`, {
+			method: "POST",
+			body: {
+				userId: user.value.identities[0].user_id,
+				text: text.value,
+				picture: pic,
+				image: user.value.identities[0].identity_data.avatar_url,
+				name: user.value.identities[0].identity_data.full_name,
+			},
+		});
+
+		userStore.isMenuOverlay = false;
+
+		clearData();
+		isLoading.value = false;
+	} catch (error) {
+		console.log(error);
+		isLoading.value = false;
+	}
 };
 </script>

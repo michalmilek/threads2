@@ -14,6 +14,7 @@
 			<div class="max-w-[350px] mx-auto px-2 text-black">
 				<div class="text-center mb-6 mt-4">Login / Register</div>
 				<button
+					@click="login('github')"
 					class="flex items-center justify-center gap-3 p-1.5 w-full border border-black rounded-full text-lg font-semibold">
 					<div class="flex items-center gap-2 justify-center">
 						<img
@@ -29,22 +30,24 @@
 </template>
 
 <script setup>
-// watchEffect(() => {
-// 	if (userStore.user) {
-// 		return navigateTo("/");
-// 	}
-// });
+const supabase = useSupabaseClient();
+const userStore = useUserStore();
 
-// const login = async (prov) => {
-//     const { user, session, error } = await supabase.auth.signIn({
-//         provider: prov,
-//         redirectTo: "http://localhost:3000/",
-//     });
-//     if (error) {
-//         console.error("Error logging in:", error);
-//         return;
-//     }
-//     console.log("User logged in:", user);
-//     console.log("Session:", session);
-// };
+watchEffect(() => {
+	if (userStore.user) {
+		return navigateTo("/");
+	}
+});
+
+const login = async prov => {
+	const { error, data } = await supabase.auth.signInWithOAuth({
+		provider: prov,
+		redirectTo: window.location.origin,
+	});
+	if (error) {
+		console.error("Error logging in:", error);
+		return;
+	}
+	console.log("Data: ", data);
+};
 </script>
